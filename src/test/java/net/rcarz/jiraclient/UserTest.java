@@ -11,9 +11,8 @@ import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyString;
-import static org.powermock.api.mockito.PowerMockito.when;
+import static org.mockito.Matchers.any;
+import static org.powermock.api.mockito.PowerMockito.*;
 
 public class UserTest {
 
@@ -73,8 +72,8 @@ public class UserTest {
     public void testGetUserJSONError() throws Exception {
 
         final RestClient restClient = PowerMockito.mock(RestClient.class);
-        when(restClient.get(anyString(),anyMap())).thenReturn(null);
-         User.get(restClient, "username");
+        doReturn(null).when(restClient).get(any(String.class), any(Map.class));
+        User.get(restClient, "username");
 
     }
 
@@ -82,15 +81,16 @@ public class UserTest {
     public void testGetUserRestError() throws Exception {
 
         final RestClient restClient = PowerMockito.mock(RestClient.class);
-        when(restClient.get(anyString(),anyMap())).thenThrow(Exception.class);
-       User.get(restClient, "username");
+        doThrow(new RuntimeException()).when(restClient).get(any(String.class), any(Map.class));
+        User.get(restClient, "username");
     }
 
     @Test
     public void testGetUser() throws Exception {
 
         final RestClient restClient = PowerMockito.mock(RestClient.class);
-        when(restClient.get(anyString(),anyMap())).thenReturn(getTestJSON());
+        doReturn(getTestJSON()).when(restClient).get(any(String.class), any(Map.class));
+
         final User user = User.get(restClient, "username");
 
         assertEquals(user.getName(), username);
