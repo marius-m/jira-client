@@ -1113,6 +1113,27 @@ public class Issue extends Resource {
     }
 
     /**
+     * Removes a worklog
+     *
+     * @param worklogId attachment id to remove
+     *
+     * @throws JiraException when the attachment removal fails
+     */
+    public void removeWorklog(String worklogId) throws JiraException {
+
+        if (worklogId == null) {
+            throw new NullPointerException("worklogId may not be null");
+        }
+
+        try {
+            URI uri = restclient.buildURI(getRestUri(key) + "/worklog/" + worklogId);
+            restclient.delete(uri);
+        } catch (Exception ex) {
+            throw new JiraException("Failed remove worklog " + worklogId, ex);
+        }
+    }
+
+    /**
      * Links this issue with another issue.
      *
      * @param issue Other issue key
