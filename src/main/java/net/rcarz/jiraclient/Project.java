@@ -136,7 +136,7 @@ public class Project extends Resource {
     public List<User> getAssignableUsers() throws JiraException {
         JSON result = null;
 
-        try {			
+        try {
             Map<String, String> queryParams = new HashMap<String, String>();
             queryParams.put("project", this.key);
             URI searchUri = restclient.buildURI(getBaseUri() + "user/assignable/search", queryParams);

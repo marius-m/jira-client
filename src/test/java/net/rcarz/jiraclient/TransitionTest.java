@@ -41,13 +41,13 @@ public class TransitionTest {
 
     @Test
     public void testTransitionToString() throws URISyntaxException {
-        Transition transition = new Transition(new RestClient(null, new URI("/123/asd")), getTestJson());
+        Transition transition = new Transition(new RestClientDefault(null, new URI("/123/asd")), getTestJson());
         assertEquals("Done", transition.toString());
     }
 
     @Test
     public void testGetFields() throws Exception {
-        Transition transition = new Transition(new RestClient(null, new URI("/123/asd")), getTestJson());
+        Transition transition = new Transition(new RestClientDefault(null, new URI("/123/asd")), getTestJson());
         final Map fields = transition.getFields();
         Assert.assertEquals(2,fields.size());
 

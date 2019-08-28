@@ -187,7 +187,7 @@ public class IssueTest {
     }
 
 
-    private static class TestableRestClient extends RestClient {
+    private static class TestableRestClient extends RestClientDefault {
 
         public String postPath = "not called";
         public JSON postPayload = JSONNull.getInstance();

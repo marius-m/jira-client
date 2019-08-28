@@ -47,7 +47,7 @@ public class JiraClient {
      * Creates a JIRA client.
      *
      * @param uri Base URI of the JIRA server
-     * @throws JiraException 
+     * @throws JiraException
      */
     public JiraClient(String uri) throws JiraException {
         this(null, uri, null);
@@ -58,19 +58,19 @@ public class JiraClient {
      *
      * @param uri Base URI of the JIRA server
      * @param creds Credentials to authenticate with
-     * @throws JiraException 
+     * @throws JiraException
      */
     public JiraClient(String uri, ICredentials creds) throws JiraException {
         this(null, uri, creds);
     }
-    
+
     /**
      * Creates an authenticated JIRA client with custom HttpClient.
      *
      * @param httpClient Custom HttpClient to be used
      * @param uri Base URI of the JIRA server
      * @param creds Credentials to authenticate with
-     * @throws JiraException 
+     * @throws JiraException
      */
     public JiraClient(HttpClient httpClient, String uri, ICredentials creds) throws JiraException {
         if (httpClient == null) {
@@ -80,7 +80,7 @@ public class JiraClient {
             httpClient = new DefaultHttpClient(connManager);
         }
 
-        restclient = new RestClient(httpClient, creds, URI.create(uri));
+        restclient = new RestClientDefault(httpClient, creds, URI.create(uri));
 
         if (creds != null) {
             username = creds.getLogonName();
