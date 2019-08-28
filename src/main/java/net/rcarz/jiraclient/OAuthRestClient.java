@@ -330,10 +330,6 @@ public class OAuthRestClient implements RestClient {
         return put(buildURI(path), payload);
     }
 
-    public HttpClient getHttpClient() {
-        return null;
-    }
-
     @Override
     public byte[] download(String uri) throws JiraException {
         OAuthRequest request = new OAuthRequest(Verb.GET, uri);

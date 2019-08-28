@@ -1,7 +1,6 @@
 package net.rcarz;
 
 import net.rcarz.jiraclient.BasicCredentials;
-import net.rcarz.jiraclient.BasicCredentialsApi;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
 import org.junit.Ignore;
@@ -28,7 +27,7 @@ public class ClientDemoTest {
         // Init client using API token
         final JiraClient jiraClient = new JiraClient(
                 "https://jira.example.com/jira",
-                new BasicCredentialsApi("batman", "kapow")
+                new BasicCredentials("batman", "kapow")
         );
 
         demoIssue(jiraClient);
