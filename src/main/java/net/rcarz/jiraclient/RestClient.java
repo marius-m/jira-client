@@ -233,11 +233,6 @@ public interface RestClient {
      */
     JSON put(String path, JSON payload) throws RestException, IOException, URISyntaxException;
 
-    /**
-     * Exposes the http client.
-     *
-     * @return the httpClient property
-     */
-    HttpClient getHttpClient();
+    byte[] download(String uri) throws JiraException;
 }
 

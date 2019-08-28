@@ -70,10 +70,12 @@ public class RestClientDefault implements RestClient {
         this.uri = uri;
     }
 
+    @Override
     public URI buildURI(String path) throws URISyntaxException {
         return buildURI(path, null);
     }
 
+    @Override
     public URI buildURI(String path, Map<String, String> params) throws URISyntaxException {
         return RestClientUtils.buildURI(uri, path, params);
     }
@@ -205,6 +207,7 @@ public class RestClientDefault implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON delete(URI uri) throws RestException, IOException {
         return request(new HttpDelete(uri));
     }
@@ -220,6 +223,7 @@ public class RestClientDefault implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON delete(String path) throws RestException, IOException, URISyntaxException {
         return delete(buildURI(path));
     }
@@ -234,6 +238,7 @@ public class RestClientDefault implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON get(URI uri) throws RestException, IOException {
         return request(new HttpGet(uri));
     }
@@ -250,6 +255,7 @@ public class RestClientDefault implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON get(String path, Map<String, String> params) throws RestException, IOException, URISyntaxException {
         return get(buildURI(path, params));
     }
@@ -265,6 +271,7 @@ public class RestClientDefault implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON get(String path) throws RestException, IOException, URISyntaxException {
         return get(path, null);
     }
@@ -281,6 +288,7 @@ public class RestClientDefault implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON post(URI uri, JSON payload) throws RestException, IOException {
         return request(new HttpPost(uri), payload);
     }
@@ -303,6 +311,7 @@ public class RestClientDefault implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON post(URI uri, String payload) throws RestException, IOException {
     	String quoted = null;
     	if(payload != null && !payload.equals(new JSONObject())){
@@ -323,6 +332,7 @@ public class RestClientDefault implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON post(String path, JSON payload)
         throws RestException, IOException, URISyntaxException {
 
@@ -340,6 +350,7 @@ public class RestClientDefault implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON post(String path)
         throws RestException, IOException, URISyntaxException {
     	
@@ -356,6 +367,7 @@ public class RestClientDefault implements RestClient {
      * @throws IOException 
      * @throws RestException 
      */
+    @Override
     public JSON post(String path, File file) throws RestException, IOException, URISyntaxException{
         return request(new HttpPost(buildURI(path)), file);
     }
@@ -370,6 +382,7 @@ public class RestClientDefault implements RestClient {
      * @throws IOException
      * @throws RestException
      */
+    @Override
     public JSON post(String path, Issue.NewAttachment... attachments)
         throws RestException, IOException, URISyntaxException
     {
@@ -387,6 +400,7 @@ public class RestClientDefault implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON put(URI uri, JSON payload) throws RestException, IOException {
         return request(new HttpPut(uri), payload);
     }
@@ -403,19 +417,17 @@ public class RestClientDefault implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON put(String path, JSON payload)
         throws RestException, IOException, URISyntaxException {
 
         return put(buildURI(path), payload);
     }
-    
-    /**
-     * Exposes the http client.
-     *
-     * @return the httpClient property
-     */
-    public HttpClient getHttpClient(){
-        return this.httpClient;
+
+    @Override
+    public byte[] download(String uri) throws JiraException {
+        throw new UnsupportedOperationException("Unsupported operation");
     }
+
 }
 

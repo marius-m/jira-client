@@ -49,10 +49,12 @@ public class OAuthRestClient implements RestClient {
         token = new Token(accessKey, tokenSecret);
     }
 
+    @Override
     public URI buildURI(String path) throws URISyntaxException {
         return buildURI(path, null);
     }
 
+    @Override
     public URI buildURI(String path, Map<String, String> params) throws URISyntaxException {
         return RestClientUtils.buildURI(uri, path, params);
     }
@@ -123,6 +125,7 @@ public class OAuthRestClient implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON delete(URI uri) throws RestException, IOException {
         return request(new OAuthRequest(Verb.DELETE, uri.toString()));
     }
@@ -138,6 +141,7 @@ public class OAuthRestClient implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws java.net.URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON delete(String path) throws RestException, IOException, URISyntaxException {
         return delete(buildURI(path));
     }
@@ -152,6 +156,7 @@ public class OAuthRestClient implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON get(URI uri) throws RestException, IOException {
         return request(new OAuthRequest(Verb.GET, uri.toString()));
     }
@@ -168,6 +173,7 @@ public class OAuthRestClient implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON get(String path, Map<String, String> params) throws RestException, IOException, URISyntaxException {
         return get(buildURI(path, params));
     }
@@ -183,6 +189,7 @@ public class OAuthRestClient implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON get(String path) throws RestException, IOException, URISyntaxException {
         return get(path, null);
     }
@@ -199,6 +206,7 @@ public class OAuthRestClient implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON post(URI uri, JSON payload) throws RestException, IOException {
         return request(new OAuthRequest(Verb.POST, uri.toString()), payload.toString());
     }
@@ -221,6 +229,7 @@ public class OAuthRestClient implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON post(URI uri, String payload) throws RestException, IOException {
         String quoted = null;
         if(payload != null && !payload.equals(new JSONObject())){
@@ -241,6 +250,7 @@ public class OAuthRestClient implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON post(String path, JSON payload)
             throws RestException, IOException, URISyntaxException {
 
@@ -258,6 +268,7 @@ public class OAuthRestClient implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON post(String path)
             throws RestException, IOException, URISyntaxException {
 
@@ -274,10 +285,12 @@ public class OAuthRestClient implements RestClient {
      * @throws IOException
      * @throws RestException
      */
+    @Override
     public JSON post(String path, File file) throws RestException, IOException, URISyntaxException{
         return request(new OAuthRequest(Verb.POST, path), file);
     }
 
+    @Override
     public JSON post(String path, Issue.NewAttachment... attachments) throws RestException, IOException, URISyntaxException {
         return request(new OAuthRequest(Verb.POST, buildURI(path).toString()), attachments);
     }
@@ -293,6 +306,7 @@ public class OAuthRestClient implements RestClient {
      * @throws RestException when an HTTP-level error occurs
      * @throws IOException when an error reading the response occurs
      */
+    @Override
     public JSON put(URI uri, JSON payload) throws RestException, IOException {
         return request(new OAuthRequest(Verb.PUT, uri.toString()), payload);
     }
@@ -309,6 +323,7 @@ public class OAuthRestClient implements RestClient {
      * @throws IOException when an error reading the response occurs
      * @throws URISyntaxException when an error occurred appending the path to the URI
      */
+    @Override
     public JSON put(String path, JSON payload)
             throws RestException, IOException, URISyntaxException {
 
@@ -319,7 +334,7 @@ public class OAuthRestClient implements RestClient {
         return null;
     }
 
-    // todo is this needed ?
+    @Override
     public byte[] download(String uri) throws JiraException {
         OAuthRequest request = new OAuthRequest(Verb.GET, uri);
         service.signRequest(token, request);
