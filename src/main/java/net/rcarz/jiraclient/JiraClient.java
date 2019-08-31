@@ -19,6 +19,13 @@
 
 package net.rcarz.jiraclient;
 
+import net.sf.json.JSON;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,14 +33,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
-
-import net.sf.json.JSON;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /**
  * A simple JIRA REST client.
@@ -44,50 +43,95 @@ public class JiraClient {
     private String username = null;
 
     /**
-     * Creates a JIRA client.
-     *
-     * @param uri Base URI of the JIRA server
-     * @throws JiraException
-     */
-    public JiraClient(String uri) throws JiraException {
-        this(null, uri, null);
-    }
-
-    /**
-     * Creates an authenticated JIRA client.
-     *
-     * @param uri Base URI of the JIRA server
-     * @param creds Credentials to authenticate with
-     * @throws JiraException
-     */
-    public JiraClient(String uri, ICredentials creds) throws JiraException {
-        this(null, uri, creds);
-    }
-
-    /**
-     * Creates an authenticated JIRA client with custom HttpClient.
+     * Creates a basic auth JIRA client with custom HttpClient.
      *
      * @param httpClient Custom HttpClient to be used
      * @param uri Base URI of the JIRA server
      * @param creds Credentials to authenticate with
      * @throws JiraException
      */
-    public JiraClient(HttpClient httpClient, String uri, ICredentials creds) throws JiraException {
+    private JiraClient(
+            RestClient restClient,
+            ICredentials creds
+    ) throws JiraException {
+        this.restclient = restClient;
+        if (creds != null) {
+            this.username = creds.getLogonName();
+            //intialize connection if required
+            creds.initialize(restclient);
+        }
+    }
+
+    /**
+     * Creates a oauth JIRA client
+     *
+     * @param httpClient Custom HttpClient to be used
+     * @param uri Base URI of the JIRA server
+     * @param creds Credentials to authenticate with
+     * @throws JiraException
+     */
+    private JiraClient(
+            RestClient restClient,
+            OAuthCreds creds
+    ) throws JiraException {
+        this.restclient = restClient;
+        this.username = "";
+    }
+
+    //region Factories
+
+    public static JiraClient createBasicClient(
+            String uri,
+            ICredentials creds
+    ) throws JiraException {
+        return createBasicClient(null, uri, creds);
+    }
+
+    public static JiraClient createBasicClient(
+            HttpClient httpClient,
+            String uri,
+            ICredentials creds
+    ) throws JiraException {
         if (httpClient == null) {
             PoolingClientConnectionManager connManager = new PoolingClientConnectionManager();
             connManager.setDefaultMaxPerRoute(20);
             connManager.setMaxTotal(40);
             httpClient = new DefaultHttpClient(connManager);
         }
-
-        restclient = new RestClientDefault(httpClient, creds, URI.create(uri));
-
-        if (creds != null) {
-            username = creds.getLogonName();
-            //intialize connection if required
-            creds.initialize(restclient);
-        }
+        final RestClient restclient = new RestClientDefault(httpClient, creds, URI.create(uri));
+        return new JiraClient(
+                restclient,
+                creds
+        );
     }
+
+    public static JiraClient createOAuthClient(
+            String uri,
+            String privateKey,
+            String consumerKey,
+            String tokenSecret,
+            String accessKey
+    ) throws JiraException {
+        final RestClient restClient = new OAuthRestClient(
+                URI.create(uri),
+                privateKey,
+                consumerKey,
+                tokenSecret,
+                accessKey
+        );
+        return new JiraClient(
+                restClient,
+                new OAuthCreds(
+                        uri,
+                        privateKey,
+                        consumerKey,
+                        tokenSecret,
+                        accessKey
+                )
+        );
+    }
+
+    //endregion
 
     /**
      * Creates a new issue in the given project.
