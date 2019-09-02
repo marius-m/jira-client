@@ -65,8 +65,6 @@ public class JiraClient {
     /**
      * Creates a oauth JIRA client
      *
-     * @param httpClient Custom HttpClient to be used
-     * @param uri Base URI of the JIRA server
      * @param creds Credentials to authenticate with
      * @throws JiraException
      */
@@ -75,7 +73,15 @@ public class JiraClient {
             OAuthCreds creds
     ) throws JiraException {
         this.restclient = restClient;
-        this.username = "";
+        try {
+            URI uriAuth = restclient.buildURI(Resource.getAuthUri() + "session");
+            JSON responseAuth = restclient.get(uriAuth);
+            JSONObject object = JSONObject.fromObject(responseAuth);
+            this.username = object.get("name").toString();
+        } catch (URISyntaxException | RestException | IOException e) {
+            e.printStackTrace();
+            throw new JiraException("Error initializing user");
+        }
     }
 
     //region Factories
@@ -653,5 +659,25 @@ public class JiraClient {
         params.put("expand","changelog.fields");
         URI uri = restclient.buildURI(Issue.getBaseUri() + "issue/" + issue.id, params);
         return restclient.get(uri);
+    }
+
+    /**
+     * Obtains information current user from session
+     * @return the project
+     * @throws JiraException failed to obtain the project
+     */
+    public User currentUser() throws JiraException {
+        try {
+            URI uriAuth = restclient.buildURI(Resource.getAuthUri() + "session");
+            JSON responseAuth = restclient.get(uriAuth);
+            JSONObject object = JSONObject.fromObject(responseAuth);
+            Object username = object.get("name");
+            Object uriSelf = object.get("self");
+            URI uriUser = URI.create(String.valueOf(uriSelf));
+            JSON responseUser = restclient.get(uriUser);
+            return new User(restclient, (JSONObject) responseUser);
+        } catch (Exception ex) {
+            throw new JiraException(ex.getMessage(), ex);
+        }
     }
 }
