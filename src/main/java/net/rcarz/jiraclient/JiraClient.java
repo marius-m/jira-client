@@ -73,15 +73,7 @@ public class JiraClient {
             OAuthCreds creds
     ) throws JiraException {
         this.restclient = restClient;
-        try {
-            URI uriAuth = restclient.buildURI(Resource.getAuthUri() + "session");
-            JSON responseAuth = restclient.get(uriAuth);
-            JSONObject object = JSONObject.fromObject(responseAuth);
-            this.username = object.get("name").toString();
-        } catch (URISyntaxException | RestException | IOException e) {
-            e.printStackTrace();
-            throw new JiraException("Error initializing user");
-        }
+        this.username = "";
     }
 
     //region Factories
