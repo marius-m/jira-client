@@ -29,10 +29,7 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A simple JIRA REST client.
@@ -539,7 +536,39 @@ public class JiraClient {
             throw new JiraException(ex.getMessage(), ex);
         }
     }
-    
+
+    /**
+     * Obtains all possible statuses, given its project key.
+     * @param key the project key
+     * @return the project
+     * @throws JiraException failed to obtain the project
+     */
+    public List<Status> getProjectStatuses(String key) throws JiraException {
+        try {
+            URI uri = restclient.buildURI(Resource.getBaseUri() + "project/" + key +  "/statuses");
+            JSON response = restclient.get(uri);
+            final JSONArray issueTypeArray = JSONArray.fromObject(response);
+            List<IssueType> issueTypes = new ArrayList<IssueType>(issueTypeArray.size());
+            for (int i = 0; i < issueTypeArray.size(); i++) {
+                JSONObject it = issueTypeArray.getJSONObject(i);
+                issueTypes.add(new IssueType(restclient, it));
+            }
+
+            // No hashCode & equals to entities, so using Map instead of Set
+            final Map<String, Status> projectStatuses = new HashMap<>();
+            for (int i = 0; i < issueTypes.size(); i++) {
+                final List<Status> statuses = issueTypes.get(i).getStatuses();
+                for (int j = 0; j < statuses.size(); j++) {
+                    final Status status = statuses.get(j);
+                    projectStatuses.put(status.getName(), status);
+                }
+            }
+            return new ArrayList<>(projectStatuses.values());
+        } catch (Exception ex) {
+            throw new JiraException(ex.getMessage(), ex);
+        }
+    }
+
     /**
      * Obtains the list of all issue types in Jira.
      * @return all issue types

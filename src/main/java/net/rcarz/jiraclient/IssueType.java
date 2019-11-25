@@ -19,6 +19,7 @@
 
 package net.rcarz.jiraclient;
 
+import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSON;
@@ -34,6 +35,7 @@ public class IssueType extends Resource {
     private String name = null;
     private boolean subtask = false;
     private JSONObject fields = null;
+    private List<Status> statuses = null;
 
     /**
      * Creates an issue type from a JSON payload.
@@ -57,6 +59,7 @@ public class IssueType extends Resource {
         iconUrl = Field.getString(map.get("iconUrl"));
         name = Field.getString(map.get("name"));
         subtask = Field.getBoolean(map.get("subtask"));
+        statuses = Field.getResourceArray(Status.class, map.get("statuses"), restclient);
 
         if (map.containsKey("fields") && map.get("fields") instanceof JSONObject)
             fields = (JSONObject)map.get("fields");
@@ -112,6 +115,10 @@ public class IssueType extends Resource {
 
     public JSONObject getFields() {
         return fields;
+    }
+
+    public List<Status> getStatuses() {
+        return statuses;
     }
 }
 
