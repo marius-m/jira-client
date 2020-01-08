@@ -14,7 +14,7 @@ public class SearchTest {
 
   @Test
   public void testSimpleSearch() throws JiraException {
-    JiraClient jira = new JiraClient("https://jira.atlassian.com/", null);
+    JiraClient jira = JiraClient.createBasicClient("https://jira.atlassian.com/", null);
 
     String key = "JRASERVER-1";
     Issue.SearchResult searchResult = jira.searchIssues("key = " + key);
@@ -27,7 +27,7 @@ public class SearchTest {
 
   @Test
   public void testEmptySearchGivesEmptyResult() throws JiraException {
-    final JiraClient jira = new JiraClient("https://jira.atlassian.com/", null);
+    final JiraClient jira = JiraClient.createBasicClient("https://jira.atlassian.com/", null);
 
     //Valid jql query that will always yield no results.
     final String q = "key = NotExisting-9999999 AND key = blah-8833772";
@@ -43,7 +43,7 @@ public class SearchTest {
 
   @Test
   public void testSearchResultIteratorWithinMaxResultLimit() throws JiraException {
-    final JiraClient jira = new JiraClient("https://jira.atlassian.com/", null);
+    final JiraClient jira = JiraClient.createBasicClient("https://jira.atlassian.com/", null);
     final int usedMax = 2;
     //Will return everything from the public Jira for Jira
     final Issue.SearchResult searchResult = jira.searchIssues("", usedMax);
@@ -57,7 +57,7 @@ public class SearchTest {
 
   @Test
   public void testIterateBeyondMaxResult() throws JiraException {
-    final JiraClient jira = new JiraClient("https://jira.atlassian.com/", null);
+    final JiraClient jira = JiraClient.createBasicClient("https://jira.atlassian.com/", null);
 
     //Will return everything from the public Jira for Jira (at the time of writing 163697 issues).
     final int usedMax = 2;
@@ -72,7 +72,7 @@ public class SearchTest {
 
   @Test
   public void testExpandingChangeLogInSearch() throws JiraException {
-    JiraClient jira = new JiraClient("https://jira.atlassian.com/", null);
+    JiraClient jira = JiraClient.createBasicClient("https://jira.atlassian.com/", null);
 
     String key = "JRA-2048";
     Issue.SearchResult searchResult = jira.searchIssues("key = " + key, null, "changelog");

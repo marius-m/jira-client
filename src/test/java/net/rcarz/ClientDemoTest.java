@@ -25,7 +25,7 @@ public class ClientDemoTest {
 //        );
 
         // Init client using API token
-        final JiraClient jiraClient = new JiraClient(
+        final JiraClient jiraClient = JiraClient.createBasicClient(
                 "https://jira.example.com/jira",
                 new BasicCredentials("batman", "kapow")
         );

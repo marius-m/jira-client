@@ -12,7 +12,7 @@ public class FilterTest {
 
 	@Test
 	public void testGetFilter() throws JiraException {
-		JiraClient jira = new JiraClient("https://jira.atlassian.com/", null);
+		JiraClient jira = JiraClient.createBasicClient("https://jira.atlassian.com/", null);
 
 		String id = "12844";
 		Filter filter = jira.getFilter(id);
