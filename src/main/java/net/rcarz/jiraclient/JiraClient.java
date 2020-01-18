@@ -701,4 +701,22 @@ public class JiraClient {
             throw new JiraException(ex.getMessage(), ex);
         }
     }
+
+    /**
+     * Obtains information current user from session
+     * @return the project
+     * @throws JiraException failed to obtain the project
+     */
+    public Object customRequest(
+            final String customUrl,
+            final Map<String, String> props
+    ) throws JiraException {
+        try {
+            JSON responseAuth = restclient.get(customUrl, props);
+            JSONObject object = JSONObject.fromObject(responseAuth);
+            return object;
+        } catch (Exception ex) {
+            throw new JiraException(ex.getMessage(), ex);
+        }
+    }
 }
