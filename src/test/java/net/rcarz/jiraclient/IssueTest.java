@@ -56,7 +56,6 @@ public class IssueTest {
         User reporter = issue.getReporter();
 
         assertEquals(reporter.getDisplayName(), "Joseph McCarthy");
-        assertEquals(reporter.getName(), "joseph");
         assertTrue(reporter.isActive());
         assertEquals(reporter.getEmail(), "joseph.b.mccarthy2012@googlemail.com");
 

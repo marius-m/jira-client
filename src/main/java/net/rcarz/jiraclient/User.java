@@ -35,6 +35,7 @@ public class User extends Resource {
     private String displayName = null;
     private String email = null;
     private String name = null;
+    private String accountId = null;
 
     /**
      * Creates a user from a JSON payload.
@@ -87,6 +88,7 @@ public class User extends Resource {
         displayName = Field.getString(map.get("displayName"));
         email = getEmailFromMap(map);
         name = Field.getString(map.get("name"));
+        accountId = Field.getString(map.get("accountId"));
     }
 
     /**
@@ -124,8 +126,13 @@ public class User extends Resource {
         return email;
     }
 
+    // Null in JIRA Cloud due to API change
     public String getName() {
         return name;
+    }
+
+    public String getAccountId() {
+        return accountId;
     }
 }
 
