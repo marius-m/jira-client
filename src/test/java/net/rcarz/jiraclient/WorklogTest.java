@@ -6,11 +6,8 @@ import org.junit.runner.RunWith;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Matchers.anyString;
@@ -45,7 +42,7 @@ public class WorklogTest {
         mockJSONObject.put("author", userJSON);
 
         WorkLog workLog = new WorkLog(mockRestClient,mockJSONObject);
-        assertEquals(workLog.getCreatedDate() + " by Joseph McCarthy",workLog.toString());
+        assertEquals(workLog.getCreatedDate() + " by Joseph McCarthy", workLog.toString());
     }
 
     @Test
@@ -58,14 +55,14 @@ public class WorklogTest {
         assertEquals("comment for worklog 1", workLog.getComment());
         assertEquals("6h", workLog.getTimeSpent());
         assertEquals("45517", workLog.getId());
-        String author = "joseph";
-        assertEquals(author, workLog.getAuthor().getName());
+        String displayAuthor = "Joseph McCarthy";
+        assertEquals(displayAuthor, workLog.getAuthor().getDisplayName());
         String started = "2015-08-17T13:19:00.000+0400";
         assertEquals(simpleDateFormat.parse(started), workLog.getStarted());
         String created = "2015-08-20T13:19:44.000+0400";
         assertEquals(simpleDateFormat.parse(created), workLog.getCreatedDate());
         assertEquals(21600, workLog.getTimeSpentSeconds());
-        assertEquals(author, workLog.getUpdateAuthor().getName());
+        assertEquals(displayAuthor, workLog.getUpdateAuthor().getDisplayName());
     }
 
 }

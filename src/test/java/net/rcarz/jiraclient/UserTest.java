@@ -26,7 +26,6 @@ public class UserTest {
     @Test
     public void testJSONDeserializer() throws IOException, URISyntaxException {
         User user = new User(new RestClientDefault(null, new URI("/123/asd")), getTestJSON());
-        assertEquals(user.getName(), username);
         assertEquals(user.getDisplayName(), displayName);
         assertEquals(user.getEmail(), email);
         assertEquals(user.getId(), userID);
@@ -93,7 +92,6 @@ public class UserTest {
 
         final User user = User.get(restClient, "username");
 
-        assertEquals(user.getName(), username);
         assertEquals(user.getDisplayName(), displayName);
         assertEquals(user.getEmail(), email);
         assertEquals(user.getId(), userID);
