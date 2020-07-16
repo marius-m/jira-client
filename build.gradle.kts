@@ -11,8 +11,8 @@ version = "0.6-SNAPSHOT"
 description = "jira-client"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 dependencies {
@@ -21,6 +21,7 @@ dependencies {
     implementation(group = "net.sf.json-lib", name = "json-lib", version = "2.4", classifier = "jdk15")
     implementation("joda-time:joda-time:${Versions.jodaTime}")
     implementation("org.scribe:scribe:1.3.7")
+    implementation("javax.xml.bind:jaxb-api:2.3.0")
 
     testImplementation("junit:junit:4.8.2")
     testImplementation("org.powermock:powermock-module-junit4:1.6.3")

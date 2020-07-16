@@ -16,7 +16,6 @@ import org.scribe.model.Response;
 import org.scribe.model.Token;
 import org.scribe.model.Verb;
 import org.scribe.oauth.OAuthService;
-import sun.misc.IOUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -336,8 +335,7 @@ public class OAuthRestClient implements RestClient {
         service.signRequest(token, request);
         Response response = request.send();
         try {
-            byte[] bytes = IOUtils.readFully(response.getStream(), -1, true);
-            return bytes;
+            return response.getStream().readAllBytes();
         } catch (IOException e) {
             throw new JiraException(String.format("Failed downloading attachment from %s: %s", this.uri, e.getMessage()),e);
         }
