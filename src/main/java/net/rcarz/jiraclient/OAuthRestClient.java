@@ -335,10 +335,19 @@ public class OAuthRestClient implements RestClient {
         service.signRequest(token, request);
         Response response = request.send();
         try {
-            return response.getStream().readAllBytes();
+            return getBytesFromInputStream(response.getStream());
         } catch (IOException e) {
             throw new JiraException(String.format("Failed downloading attachment from %s: %s", this.uri, e.getMessage()),e);
         }
+    }
+
+    private static byte[] getBytesFromInputStream(InputStream is) throws IOException {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        final byte[] buffer = new byte[0xFFFF];
+        for (int len = is.read(buffer); len != -1; len = is.read(buffer)) {
+            os.write(buffer, 0, len);
+        }
+        return os.toByteArray();
     }
 
 }
