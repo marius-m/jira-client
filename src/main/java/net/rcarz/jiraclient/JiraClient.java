@@ -684,9 +684,30 @@ public class JiraClient {
 
     /**
      * Obtains information current user from session
+     * Works in same way as {@link #currentUser()}, but uses a workaround for latest API
+     * https://community.atlassian.com/t5/Jira-questions/API-breaking-change-bug-quot-The-accountId-query-parameter-needs/qaq-p/1350776
+     *
+     * @return user
+     * @throws JiraException failed to obtain the project
+     */
+    public User currentUser2() throws JiraException {
+        try {
+            URI uriAuth = restclient.buildURI(Resource.getBaseUri() + "myself");
+            JSON responseAuth = restclient.get(uriAuth);
+            return new User(restclient, (JSONObject) responseAuth);
+        } catch (Exception ex) {
+            throw new JiraException(ex.getMessage(), ex);
+        }
+    }
+
+    /**
+     * Obtains information current user from session
+     *
+     * @deprecated broken with latest API, use {@link #currentUser2()}
      * @return the project
      * @throws JiraException failed to obtain the project
      */
+    @Deprecated
     public User currentUser() throws JiraException {
         try {
             URI uriAuth = restclient.buildURI(Resource.getAuthUri() + "session");
